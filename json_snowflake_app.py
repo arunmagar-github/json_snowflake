@@ -6,6 +6,11 @@ from urllib.error import URLError
 
 streamlit.title("Order Delivery status")
 
+chart_data = pd.DataFrame(
+     np.random.randn(20, 3),
+     columns=['a', 'b', 'c'])
+
+st.line_chart(chart_data)
 
 #snowflake related functions
 def get_order_list():
