@@ -6,16 +6,29 @@ from urllib.error import URLError
 
 streamlit.title("Order Delivery status")
 
-streamlit.error("In Delivery:1")
-streamlit.success("Total delivered:1")
+
 
 #snowflake related functions
-def get_order_list():
+def get_running_order_list():
   with my_cnx.cursor() as my_cur:
-    my_cur.execute("select order_details:order_id  ,order_details:user_id,order_details:user_name ,order_details:order_datetime,order_details:delivery_datetime ,order_details:status,order_details:email,order_details:origin_location ,order_details:destination_location from order_db.public.orders")
+    my_cur.execute("select order_details:order_id  ,order_details:user_id,order_details:user_name ,order_details:order_datetime,order_details:delivery_datetime ,order_details:status,order_details:email,order_details:origin_location ,order_details:destination_location from order_db.public.orders where order_details:status !='delivered'")
     return my_cur.fetchall()
 
+def get_completed_order_list():
+  with my_cnx.cursor() as my_cur:
+    my_cur.execute("select order_details:order_id  ,order_details:user_id,order_details:user_name ,order_details:order_datetime,order_details:delivery_datetime ,order_details:status,order_details:email,order_details:origin_location ,order_details:destination_location from order_db.public.orders where order_details:status ='delivered'")
+    return my_cur.fetchall()  
+  
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-my_data_rows=get_order_list()
+my_data_rows_running_order=get_running_order_list()
 my_cnx.close();
-streamlit.dataframe(my_data_rows)
+
+my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+my_data_rows_completed_order=get_completed_order_list()
+my_cnx.close();
+
+streamlit.error("In Delivery:"+my_data_rows_running_order.count())
+streamlit.success("Total delivered:"+my_data_rows_completed_order.count())
+
+streamlit.dataframe(my_data_rows_running_order)
+streamlit.dataframe(my_data_rows_completed_order)
