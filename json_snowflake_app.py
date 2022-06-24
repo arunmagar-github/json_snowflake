@@ -32,5 +32,8 @@ streamlit.error(errorMsg)
 successMsg="Total delivered:"+str(len(my_data_rows_completed_order))
 streamlit.success(successMsg)
 
+streamlit.title("Not Delivered:")
 streamlit.dataframe(my_data_rows_running_order)
-#streamlit.dataframe(my_data_rows_completed_order)
+
+streamlit.title("Delivered:")
+streamlit.dataframe(my_data_rows_completed_order)
