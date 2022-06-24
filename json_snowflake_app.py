@@ -27,8 +27,10 @@ my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 my_data_rows_completed_order=get_completed_order_list()
 my_cnx.close();
 
-streamlit.error("In Delivery:"+len(my_data_rows_running_order))
-streamlit.success("Total delivered:"+len(my_data_rows_completed_order))
+errorMsg="In Delivery:"+str(len(my_data_rows_running_order));
+streamlit.error(errorMsg);
+successMsg="Total delivered:"+str(len(my_data_rows_completed_order));
+streamlit.success(successMsg);
 
-streamlit.dataframe(my_data_rows_running_order)
-streamlit.dataframe(my_data_rows_completed_order)
+streamlit.dataframe(my_data_rows_running_order);
+streamlit.dataframe(my_data_rows_completed_order);
